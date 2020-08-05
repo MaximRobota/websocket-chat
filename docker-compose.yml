@@ -1,0 +1,75 @@
+version: "3"
+
+services:
+  identity_service:
+#    build:
+#      context: ./identity-service
+    image: cc-dev-identity-service:1.0.0
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - 5050:5050
+    volumes:
+      - ./db:/db
+    command: python identity_service.py
+    container_name: identity-service
+#
+#  message_persistence_service:
+#    build:
+#      context: ./message-persistence-service
+#    image: cc-dev-message-persistence-service:1.0.0
+#    depends_on:
+#      - db
+#    links:
+#      - db
+#    ports:
+#      - 5051:5051
+#    volumes:
+#      - ./db:/db
+##    networks:
+##      -
+#    command: python message_persistence_service.py
+#    container_name: message-persistence-service
+
+#  websocket_service:
+#    build:
+#      context: ./websocket-service
+##      dockerfile: Dockerfile
+#    image: cc-dev-websocket-service:1.0.0
+##    links:
+##      - db
+##      - redis
+##    ports:
+##      - 5052:5052
+##    volumes:
+##      - ./db:/db
+#    command: python websocket_service.py
+#    container_name: websocket-service
+
+  redis:
+    image: redis:4.0-alpine
+    ports:
+      - 6379:6379
+    command: ['redis-server']
+    container_name: redis
+#    volumes:
+#      - redis-data:/data
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - 3399:3399
+#    expose:
+#      - 3399
+#    volumes:
+#      - db-data:/var/lib/mysql:delegated
+    container_name: db
+
+#  volumes:
+#    redis-data:
+#    db-data:

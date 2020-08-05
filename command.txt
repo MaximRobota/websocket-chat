@@ -1,0 +1,15 @@
+https://hub.docker.com/
+
+sudo docker ps -a (ls)
+sudo docker rm -v $(sudo docker ps -aq -f status=exited) (Удалить неиспольз контейнеры)
+sudo docker images
+sudo docker rmi 1c61205f8b8f 1c61205f8b82 (удалить образы)
+
+start:
+    sudo docker-compose build
+    sudo docker-compose up (-d)
+    sudo docker-compose ps (ls images)
+    sudo docker-compose up -d db redis (install)
+
+stop:
+    sudo docker stop 93002b70cdeb

@@ -1,0 +1,17 @@
+# General configuration
+APP_PROTOCOL: "http"
+APP_HOSTNAME: "localhost:3000"
+APP_SESSION_SAVE: "1"
+
+# Redis configuration
+REDIS_HOST: localhost #redis
+REDIS_PORT: 6379
+REDIS_CACHE_DB_NUM: 0
+REDIS_SIDEKIQ_DB_NUM: 10
+
+# Database configuration
+DATABASE_HOST: "127.0.0.1"
+DATABASE_PORT: "3399"
+DATABASE_NAME: "chat_development"
+DATABASE_USERNAME: "root"
+DATABASE_PASSWORD: "devpass"
