@@ -6,6 +6,9 @@ sudo docker images
 sudo docker rmi 1c61205f8b8f 1c61205f8b82 (удалить образы)
 
 start:
+    docker build . -t flaskr
+
+
     sudo docker-compose build
     sudo docker-compose up (-d)
     sudo docker-compose ps (ls images)

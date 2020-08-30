@@ -13,7 +13,7 @@ services:
       - 5050:5050
     volumes:
       - ./db:/db
-    command: python identity_service.py
+    command: python identity_service\ py
     container_name: identity-service
 #
 #  message_persistence_service:
@@ -30,7 +30,7 @@ services:
 #      - ./db:/db
 ##    networks:
 ##      -
-#    command: python message_persistence_service.py
+#    command: python message_persistence_service\ .py
 #    container_name: message-persistence-service
 
 #  websocket_service:
@@ -66,10 +66,15 @@ services:
       - 3399:3399
 #    expose:
 #      - 3399
-#    volumes:
-#      - db-data:/var/lib/mysql:delegated
+    volumes:
+      - ./db/data:/var/lib/mysql
     container_name: db
 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 6080:8080
 #  volumes:
 #    redis-data:
 #    db-data:
