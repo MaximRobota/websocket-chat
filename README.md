@@ -105,3 +105,8 @@ Create docker image for identity service
 Create docker image for database
 Create docker-compose.yaml for id_service and database 
 Use docker-compose up to start the two services
+
+Start:
+ sudo docker-compose up
+    (http://localhost:5052 (:5054))
+    DB: http://localhost:6080

@@ -2,18 +2,11 @@ version: "3"
 
 services:
   identity_service:
-#    build:
-#      context: ./identity-service
-    image: cc-dev-identity-service:1.0.0
-    depends_on:
-      - db
-    links:
-      - db
-    ports:
-      - 5050:5050
+    build: ./identity-service
     volumes:
-      - ./db:/db
-    command: python identity_service\ py
+      - ./identity-service:/usr/src/app
+    ports:
+      - 5052:80
     container_name: identity-service
 #
 #  message_persistence_service:
@@ -33,20 +26,16 @@ services:
 #    command: python message_persistence_service\ .py
 #    container_name: message-persistence-service
 
-#  websocket_service:
-#    build:
-#      context: ./websocket-service
-##      dockerfile: Dockerfile
-#    image: cc-dev-websocket-service:1.0.0
-##    links:
-##      - db
-##      - redis
-##    ports:
-##      - 5052:5052
-##    volumes:
-##      - ./db:/db
-#    command: python websocket_service.py
-#    container_name: websocket-service
+  websocket_service:
+    build: ./websocket-service
+    volumes:
+      - ./websocket-service:/usr/src/app
+    links:
+      - db
+      - redis
+    ports:
+      - 5054:80
+    container_name: websocket-service
 
   redis:
     image: redis:4.0-alpine
