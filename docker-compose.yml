@@ -3,38 +3,56 @@ version: "3"
 services:
   identity_service:
     build: ./identity-service
+    image: cc-dev-identity-service:1.0.0
+    environment:
+      DATABASE_HOST: db
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: devpass
+      DATABASE_PORT: 3306
     volumes:
-      - ./identity-service:/usr/src/app
+      - ./identity-service:/usr/src/app/identity-service
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - 5051:80
+    container_name: identity-service
+
+  message_persistence_service:
+    build: ./message-persistence-service
+    image: cc-dev-message-persistence-service:1.0.0
+    environment:
+      DATABASE_HOST: db
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: devpass
+      DATABASE_PORT: 3306
+    depends_on:
+      - db
+    links:
+      - db
     ports:
       - 5052:80
-    container_name: identity-service
-#
-#  message_persistence_service:
-#    build:
-#      context: ./message-persistence-service
-#    image: cc-dev-message-persistence-service:1.0.0
-#    depends_on:
-#      - db
-#    links:
-#      - db
-#    ports:
-#      - 5051:5051
-#    volumes:
-#      - ./db:/db
-##    networks:
-##      -
-#    command: python message_persistence_service\ .py
-#    container_name: message-persistence-service
+    container_name: message-persistence-service
 
   websocket_service:
     build: ./websocket-service
+    image: cc-dev-websocket-service:1.0.0
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_CACHE_DB_NUM: 0
+      REDIS_SIDEKIQ_DB_NUM: 10
     volumes:
       - ./websocket-service:/usr/src/app
     links:
-      - db
       - redis
+      - identity_service
+    depends_on:
+      - redis
+      - identity_service
     ports:
-      - 5054:80
+      - 5053:80
     container_name: websocket-service
 
   redis:
@@ -42,19 +60,19 @@ services:
     ports:
       - 6379:6379
     command: ['redis-server']
+    volumes:
+      - redis-data:/data
     container_name: redis
-#    volumes:
-#      - redis-data:/data
 
   db:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: 'devpass'
     ports:
-      - 3399:3399
-#    expose:
-#      - 3399
+      - 3399:3306
+    expose:
+      - 3399
     volumes:
       - ./db/data:/var/lib/mysql
     container_name: db
@@ -64,6 +82,7 @@ services:
     restart: always
     ports:
       - 6080:8080
-#  volumes:
-#    redis-data:
-#    db-data:
+
+volumes:
+  redis-data:
+  db-data:
