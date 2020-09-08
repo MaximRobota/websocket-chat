@@ -16,3 +16,12 @@ start:
 
 stop:
     sudo docker stop 93002b70cdeb
+
+
+
+Python:
+    pip freeze (ls)
+    sudo pip install socketio (i)
+    python websocket-service.py (start)
+    pytest test_auth_user.py (test)
+    pip install -r requirements.txt (package install)
