@@ -16,3 +16,27 @@ start:
 
 stop:
     sudo docker stop 93002b70cdeb
+
+
+
+Python:
+    pip freeze (ls)
+    sudo pip install socketio (i)
+    python websocket-service.py (start)
+    pytest test_auth_user.py (test)
+    pip install -r requirements.txt (package install)
+
+DB
+from message_persistence_service import db
+db.create_all()
+db.drop_all()
+
+from message_persistence_service import Events
+data = Events('uid_test', 'Message text')
+db.session.add(data)
+db.session.commit()
+
+Events.query.all()
+db.session.delete(Events.query.filter_by(id=1).first())
+
+
