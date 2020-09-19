@@ -7,8 +7,6 @@ sudo docker rmi 1c61205f8b8f 1c61205f8b82 (удалить образы)
 
 start:
     docker build . -t flaskr
-
-
     sudo docker-compose build
     sudo docker-compose up (-d)
     sudo docker-compose ps (ls images)
@@ -18,7 +16,6 @@ stop:
     sudo docker stop 93002b70cdeb
 
 
-
 Python:
     pip freeze (ls)
     sudo pip install socketio (i)
@@ -26,17 +23,24 @@ Python:
     pytest test_auth_user.py (test)
     pip install -r requirements.txt (package install)
 
-DB
-from message_persistence_service import db
-db.create_all()
-db.drop_all()
+DB:
+    from message_persistence_service import db
+    db.create_all()
+    db.drop_all()
 
-from message_persistence_service import Events
-data = Events('uid_test', 'Message text')
-db.session.add(data)
-db.session.commit()
+    from message_persistence_service import Events
+    data = Events('uid_test', 'Message text')
+    db.session.add(data)
+    db.session.commit()
 
 Events.query.all()
-db.session.delete(Events.query.filter_by(id=1).first())
+    db.session.delete(Events.query.filter_by(id=1).first())
 
+Migrations:
+    python message_persistence_service.py db init
+    python message_persistence_service.py db migrate
+    python message_persistence_service.py db upgrade
+    python message_persistence_service.py db --help
 
+Start local server:
+    python message_persistence_service.py runserver
