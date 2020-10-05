@@ -1,7 +1,7 @@
+from .models import Events
+from app import app, db
 from flask import jsonify
 from flask import request
-from app import app, db
-from .models import Events
 
 @app.route('/')
 def index():
@@ -12,6 +12,7 @@ def new_event():
     uid = request.form['uid']
     message = request.form['message']
     event = Events(uid=uid, message=message)
+
     try:
         db.session.add(event)
         db.session.commit()
