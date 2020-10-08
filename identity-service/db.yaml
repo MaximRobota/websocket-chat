@@ -1,4 +1,5 @@
 mysql_host : 'localhost'
 mysql_user : 'root'
 mysql_password : 'root'
+mysql_port : 3306
 mysql_db : 'max_database'
