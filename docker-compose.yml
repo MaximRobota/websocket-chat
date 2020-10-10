@@ -5,10 +5,10 @@ services:
     build: ./identity-service
     image: cc-dev-identity-service:1.0.0
     environment:
-      DATABASE_HOST: db
-      DATABASE_USERNAME: root
-      DATABASE_PASSWORD: root
-      DATABASE_PORT: 3306
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_USER: 'max'
+      MYSQL_PASSWORD: 'max'
     volumes:
       - ./identity-service:/usr/src/app/identity-service
     depends_on:
@@ -23,10 +23,10 @@ services:
     build: ./message-persistence-service
     image: cc-dev-message-persistence-service:1.0.0
     environment:
-      DATABASE_HOST: db
-      DATABASE_USERNAME: root
-      DATABASE_PASSWORD: root
-      DATABASE_PORT: 3306
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_USER: 'max'
+      MYSQL_PASSWORD: 'max'
     depends_on:
       - db
     links:
@@ -69,12 +69,16 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'devpass'
+      MYSQL_DATABASE: 'max_database'
+      MYSQL_USER: 'max'
+      MYSQL_PASSWORD: 'max'
     ports:
       - 3399:3306
     expose:
       - 3399
     volumes:
-      - ./db/data:/var/lib/mysql
+      - "./db/data:/var/lib/mysql"
+      - "./db/initdb:/docker-entrypoint-initdb.d/:ro"
     container_name: db
 
   adminer:

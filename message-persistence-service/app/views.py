@@ -3,9 +3,11 @@ from app import app, db
 from flask import jsonify
 from flask import request
 
+
 @app.route('/')
 def index():
     return 'message-persistence-service'
+
 
 @app.route('/events', methods=['POST'])
 def new_event():
@@ -17,8 +19,8 @@ def new_event():
         db.session.add(event)
         db.session.commit()
         return 'Added new event'
-    except:
-        return 'Error'
+    except Exception as e:
+        return f'Error: {e}'
 
 
 # Display All events from database
