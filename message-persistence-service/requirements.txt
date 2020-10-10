@@ -4,3 +4,4 @@ flask-sqlalchemy
 flask_sqlalchemy
 flask-migrate
 pyyaml
+mysqlclient
