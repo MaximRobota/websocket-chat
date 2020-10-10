@@ -12,11 +12,10 @@ def index():
 
 
 @app.route('/user', methods=['POST'])
-def user():
-    if request.method == 'POST':
-        name = request.form['name']
-        password = request.form['password']
-        user = Users(name=name, password=password)
+def new_user():
+    name = request.form['name']
+    password = request.form['password']
+    user = Users(name=name, password=password)
 
     try:
         db.session.add(user)
@@ -26,7 +25,7 @@ def user():
         return 'Error'
 
 
-# Display All events from database
+# Display All users from database
 @app.route('/users/', methods=['GET'])
 def users():
     # data = cur.fetchall()
@@ -35,8 +34,8 @@ def users():
     return jsonify({'users': list(map(lambda users: users.serialize(), Users.query.all()))})
 
 
-# # Route to Delete an event from the MySQL Database
-@app.route('/events/<int:id>', methods=['DELETE'])
+# # Route to Delete an user from the MySQL Database
+@app.route('/users/<int:id>', methods=['DELETE'])
 def delete(id):
     try:
         db.session.delete(Users.query.filter_by(id=id).first())
