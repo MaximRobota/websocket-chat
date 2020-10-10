@@ -2,3 +2,5 @@ flask-restful==0.3.5
 flask==1.1.1
 flask-sqlalchemy
 flask_sqlalchemy
+flask-migrate
+pyyaml

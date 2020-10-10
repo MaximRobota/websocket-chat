@@ -6,4 +6,4 @@ WORKDIR /usr/src/app/
 COPY . /usr/src/app/
 RUN pip install --no-cache-dir -r requirements.txt && pip install --upgrade pip
 
-CMD [ "python", "websocket-service.py" ]
+CMD [ "python", "websocket_service.py" ]

@@ -125,4 +125,4 @@ Environment:
 sudo docker-compose up
 ```
 (http://localhost:5052 (:5054))
-DB: http://localhost:6080
+DB: http://localhost:8080

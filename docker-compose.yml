@@ -58,7 +58,7 @@ services:
   redis:
     image: redis:4.0-alpine
     ports:
-      - 6379:6379
+      - 6380:6379
     command: ['redis-server']
     volumes:
       - redis-data:/data
