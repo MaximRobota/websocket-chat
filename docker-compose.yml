@@ -7,7 +7,7 @@ services:
     environment:
       DATABASE_HOST: db
       DATABASE_USERNAME: root
-      DATABASE_PASSWORD: devpass
+      DATABASE_PASSWORD: root
       DATABASE_PORT: 3306
     volumes:
       - ./identity-service:/usr/src/app/identity-service
@@ -25,7 +25,7 @@ services:
     environment:
       DATABASE_HOST: db
       DATABASE_USERNAME: root
-      DATABASE_PASSWORD: devpass
+      DATABASE_PASSWORD: root
       DATABASE_PORT: 3306
     depends_on:
       - db
