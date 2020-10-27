@@ -13,7 +13,7 @@ class Config:
     mysql_port = os.getenv('MYSQL_PORT')
     mysql_db = os.getenv('MYSQL_DB')
 
-    # SQLALCHEMY_DATABASE_URI = 'mysql://root:root@127.0.0.1:3306/max_database'
+    # SQLALCHEMY_DATABASE_URI = 'mysql://root:root@127.0.0.1:3306/mysql_database'
     SQLALCHEMY_DATABASE_URI = f'mysql://{mysql_user}:{mysql_password}@{mysql_host}:{mysql_port}/{mysql_db}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

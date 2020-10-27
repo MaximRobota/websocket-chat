@@ -3,6 +3,8 @@ from app import app, db
 from flask import jsonify
 from flask import request
 
+db.create_all()
+
 
 @app.route('/')
 def index():

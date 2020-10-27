@@ -7,8 +7,8 @@ services:
     environment:
       MYSQL_HOST: db
       MYSQL_PORT: 3306
-      MYSQL_USER: 'max'
-      MYSQL_PASSWORD: 'max'
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
     volumes:
       - ./identity-service:/usr/src/app/identity-service
     depends_on:
@@ -17,7 +17,6 @@ services:
       - db
     ports:
       - 5051:80
-    container_name: identity-service
 
   message_persistence_service:
     build: ./message-persistence-service
@@ -25,15 +24,15 @@ services:
     environment:
       MYSQL_HOST: db
       MYSQL_PORT: 3306
-      MYSQL_USER: 'max'
-      MYSQL_PASSWORD: 'max'
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_DB: $MYSQL_DB
     depends_on:
       - db
     links:
       - db
     ports:
       - 5052:80
-    container_name: message-persistence-service
 
   websocket_service:
     build: ./websocket-service
@@ -53,7 +52,7 @@ services:
       - identity_service
     ports:
       - 5053:80
-    container_name: websocket-service
+
 
   redis:
     image: redis:4.0-alpine
@@ -62,24 +61,25 @@ services:
     command: ['redis-server']
     volumes:
       - redis-data:/data
-    container_name: redis
+
 
   db:
     image: mysql:5.7
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'devpass'
-      MYSQL_DATABASE: 'max_database'
-      MYSQL_USER: 'max'
-      MYSQL_PASSWORD: 'max'
+      MYSQL_DATABASE: $MYSQL_DB
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
     ports:
       - 3399:3306
     expose:
       - 3399
-    volumes:
-      - "./db/data:/var/lib/mysql"
-      - "./db/initdb:/docker-entrypoint-initdb.d/:ro"
-    container_name: db
+#    volumes:
+#      - "./db/data:/var/lib/mysql"
+#      - "./db/initdb:/docker-entrypoint-initdb.d/:ro"
 
   adminer:
     image: adminer
