@@ -120,9 +120,15 @@ Environment:
 - [ ] Create docker-compose.yaml for id_service and database 
 - [ ] Use docker-compose up to start the two services
 
-### How to run
+### QUICK START (Use for help 'command.txt')
+
+```
+sudo docker-compose build
+```
+
 ```
 sudo docker-compose up
 ```
-(http://localhost:5052 (:5054))
-DB: http://localhost:8080
+Services: http://localhost:5051 (:5052, :5053)
+
+DB (adminer): http://localhost:8080
