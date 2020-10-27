@@ -15,7 +15,6 @@ start:
 stop:
     sudo docker stop 93002b70cdeb
 
-
 Python:
     pip freeze (ls)
     sudo pip install socketio (i)
