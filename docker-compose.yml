@@ -81,7 +81,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 6080:8080
+      - 8080:8080
 
 volumes:
   redis-data:
