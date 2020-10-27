@@ -18,11 +18,11 @@ stop:
 Python:
     pip freeze (ls)
     sudo pip install socketio (i)
-    python websocket-service.py (start)
-    pytest test_auth_user.py (test)
     pip install -r requirements.txt (package install)
+    pip freeze > requirements.txt
 
 DB:
+    from app import db
     from message_persistence_service import db
     db.create_all()
     db.drop_all()
