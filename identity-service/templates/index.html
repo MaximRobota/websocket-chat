@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  {% block head %}
+  <meta charset="utf-8">
+  <title>{% block title %}CRUD App Using Python 3 Flask Framework{% endblock %}</title>
+  <link rel="stylesheet" href={{url_for('static', filename = 'css/bootstrap.min.css' )}}>
+  <link rel="stylesheet" href={{url_for('static', filename = 'css/index.css' )}}>
+  {% endblock %}
+  <style media="screen">
+  a{
+    float: right;
+    padding-bottom: 10px;
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    {% block body %}
+    <h2 class = "jumbotron">CRUD App Using Python 3 Flask Framework</h2>
+    <a href = {{ url_for('newuser') }} class="btn btn-primary btn-sm">Create New Data</a>
+    <table class = "table table-bordered table-sm">
+      <thead class = "thead-light">
+        <tr>
+          <th>Id No.</th>
+          <th>Name</th>
+          <th>Password</th>
+          <th>Timestamp</th>
+          <th>Update Data</th>
+          <th>Delete Data</th>
+        </tr>
+      </thead>
+      {% for data in data %}
+      <tr>
+        <td>{{data.id}}</td>
+        <td>{{data.name}}</td>
+        <td>{{data.password}}</td>
+        <td>{{data.time_stamp}}</td>
+        <td><a href = '/edit/{{data.id}}' class="btn btn-primary">EDIT</a></td>
+        <td><a href = '/delete/{{data.id}}' class="btn btn-danger">DEL</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <script src={{url_for('static', filename = 'js/jquery-3.3.1.min.js')}} charset="utf-8"></script>
+  <script src={{url_for('static', filename = 'js/bootstrap.min.js')}} charset="utf-8"></script>
+  {% endblock %}
+</body>
+</html>
