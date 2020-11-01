@@ -3,7 +3,10 @@ from app import app, db
 from flask import jsonify
 from flask import request
 
-db.create_all()
+
+@app.before_first_request
+def before_first_request_func():
+    db.create_all()
 
 
 @app.route('/')

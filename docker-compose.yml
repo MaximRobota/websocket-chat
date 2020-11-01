@@ -9,6 +9,7 @@ services:
       MYSQL_PORT: 3306
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_DB: $MYSQL_DB
     volumes:
       - ./identity-service:/usr/src/app/identity-service
     depends_on:
@@ -85,7 +86,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8001:8080
 
 volumes:
   redis-data:

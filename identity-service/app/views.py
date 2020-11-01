@@ -5,6 +5,10 @@ from flask import request
 
 
 # from flask import redirect
+@app.before_first_request
+def before_first_request_func():
+    db.create_all()
+
 
 @app.route('/')
 def index():
@@ -20,9 +24,10 @@ def new_user():
     try:
         db.session.add(user)
         db.session.commit()
-        return 'Added new user'
-    except:
-        return 'Error'
+
+        return {"user": user.serialize()}
+    except Exception as e:
+        return {"error": str(e)}, 500
 
 
 # Display All users from database
