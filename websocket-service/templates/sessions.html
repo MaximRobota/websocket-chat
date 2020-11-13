@@ -3,14 +3,16 @@
     <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flask-SocketIO Sessions example</title>
-    <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script src="//code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+            integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="pure-g">
     <div class="pure-u-1-4"></div>
     <div class="pure-u-1-2">
-        <h1>Flask-SocketIO Sessions example</h1>
+        <h1>Flask-SocketIO Sessions</h1>
 
         <div class="pure-form">
             <h2>HTTP</h2>
@@ -73,7 +75,7 @@
                 $('#http-user').text(data['user']);
             }
         });
-    }, 1000);
+    }, 10000);
 
     $('#submit-http').click(function() {
         $.ajax({

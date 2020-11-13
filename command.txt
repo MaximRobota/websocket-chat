@@ -43,3 +43,6 @@ Migrations:
 
 Start local server:
     python message_persistence_service.py runserver
+
+Start test:
+    pytest test_main.py -s

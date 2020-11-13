@@ -23,7 +23,7 @@ def prepare_services():
         except Exception as e:
             print(e)
             pass
-        sleep(1)
+        sleep(5)
     yield
     subprocess.run(["docker-compose", "down"], cwd=REPO_ROOT)
 

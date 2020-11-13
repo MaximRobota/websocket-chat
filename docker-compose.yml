@@ -75,9 +75,9 @@ services:
     healthcheck:
       test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
     ports:
-      - 3399:3306
+      - 3380:3306
     expose:
-      - 3399
+      - 3380
 #    volumes:
 #      - "./db/data:/var/lib/mysql"
 #      - "./db/initdb:/docker-entrypoint-initdb.d/:ro"
