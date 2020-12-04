@@ -63,6 +63,13 @@ services:
     volumes:
       - redis-data:/data
 
+  kafka_service:
+    build: ./kafka-service
+    image: cc-dev-kafka-service:1.0.0
+    volumes:
+      - ./kafka-service:/usr/src/app/kafka-service
+    ports:
+      - 5054:80
 
   db:
     image: mysql:5.7
