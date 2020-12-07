@@ -13,7 +13,7 @@ def prepare_services():
     subprocess.run(["docker-compose", "down"], cwd=REPO_ROOT)
     subprocess.run(["docker-compose", "build"], cwd=REPO_ROOT)
     docker = subprocess.run(["docker-compose", "up", "-d"], cwd=REPO_ROOT)
-    while True:
+    for i in range(8):
         print("Trying to get connection to a microservice")
         try:
             resp = requests.get("http://localhost:5051")
@@ -21,7 +21,7 @@ def prepare_services():
             resp.raise_for_status()
             break
         except Exception as e:
-            print(e)
+            # print(e)
             pass
         sleep(5)
     yield
@@ -30,8 +30,8 @@ def prepare_services():
 
 @pytest.mark.usefixtures("prepare_services")
 def test_user():
-    username = "Vasiya"
-    resp = requests.post("http://localhost:5051/user", data={"name": username, "password": "pass"}).json()
+    useremail = "Vasiya"
+    resp = requests.post("http://localhost:5051/auth/register", data={"email": useremail, "password": "pass"}).json()
     assert "user" in resp
-    assert resp["user"]["name"] == username
+    assert resp["user"]["email"] == useremail
     assert "id" in resp["user"]

@@ -7,9 +7,9 @@
 
 ### Identity service:
 ```
-/register (name, pass) -> token
-/auth (name, pass) -> token
-/getIdByToken -> int (id)
+/auth/register (name, pass) -> token
+/auth/login (name, pass) -> token
+/auth/getIdByToken -> int (id)
 ```
 ### Web socket service
 * Uses kafka to post messages that need saving (queue “message_save”)

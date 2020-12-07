@@ -4,17 +4,17 @@ from datetime import datetime
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    password = db.Column(db.String(80))
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))
     created_on = db.Column(db.DateTime(), default=datetime.utcnow)
 
-    def __init__(self, name, password):
-        self.name = name
+    def __init__(self, email, password):
+        self.email = email
         self.password = password
 
 
     def serialize(self):
         return {"id": self.id,
-                "name": self.name,
+                "email": self.email,
                 "password": self.password,
                 "created_on": self.created_on}
