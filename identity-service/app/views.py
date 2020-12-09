@@ -1,17 +1,14 @@
 from .models import User
 from app import app, db
 from .controllers.auth_controller import AuthController
-from flask import jsonify
 from flask import request
-# from flask_login import login_required
 # from flask_cors import CORS
 # import os
-
 # CORS(app, origins=[os.environ.get('CLIENT_HOST')])
+# from flask import redirect
 
 auth_controller = AuthController()
 
-# from flask import redirect
 @app.before_first_request
 def before_first_request_func():
     db.create_all()
@@ -33,31 +30,25 @@ def auth():
 
 
 @app.route('/auth/getIdByToken/<int:user_token>', methods=['GET'])
-# @login_required
 def get_id_by_token(user_token):
     return auth_controller.get_id_by_token(user_token)
 
 
-# Display All users from database
-@app.route('/users/', methods=['GET'])
-# @login_required
-def users():
-    # data = cur.fetchall()
-    # data = jsonify({'users': list(map(lambda users: users.serialize(), User.query.all()))})
-    # return render_template('index.html', data=data)
-    # return jsonify({'users': list(map(lambda user: user.serialize(), User.query.all()))})
-    return auth_controller.getUsers()
+@app.route('/auth/status', methods=['GET'])
+def status():
+    return auth_controller.status()\
 
 
+@app.route('/auth/logout', methods=['GET'])
+def logout():
+    return auth_controller.logout()
 
-# # Route to Delete an user from the MySQL Database
+
 @app.route('/users/<int:id>', methods=['DELETE'])
-# @login_required
 def delete(id):
     try:
         db.session.delete(User.query.filter_by(id=id).first())
         db.session.commit()
-        # return redirect('/users')
         return 'Deleted user #' + id
     except:
         return 'Error'
