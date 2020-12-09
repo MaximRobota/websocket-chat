@@ -19,7 +19,7 @@ Python:
     pip freeze (ls)
     sudo pip install socketio (i)
     pip install -r requirements.txt (package install)
-    pip freeze > requirements.txt
+    pip freeze > requirements.txt  (add packages to requirements.txt)
 
 DB:
     from app import db

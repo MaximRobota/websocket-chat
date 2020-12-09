@@ -30,7 +30,7 @@ def prepare_services():
 
 @pytest.mark.usefixtures("prepare_services")
 def test_user():
-    useremail = "Vasiya"
+    useremail = "Vasiya@gm.com"
     resp = requests.post("http://localhost:5051/auth/register", data={"email": useremail, "password": "pass"}).json()
     assert "user" in resp
     assert resp["user"]["email"] == useremail

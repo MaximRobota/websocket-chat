@@ -1,4 +1,4 @@
-from .models import Users
+from .models import User
 from app import app, db
 from .controllers.auth_controller import AuthController
 from flask import jsonify
@@ -43,9 +43,11 @@ def get_id_by_token(user_token):
 # @login_required
 def users():
     # data = cur.fetchall()
-    # data = jsonify({'users': list(map(lambda users: users.serialize(), Users.query.all()))})
+    # data = jsonify({'users': list(map(lambda users: users.serialize(), User.query.all()))})
     # return render_template('index.html', data=data)
-    return jsonify({'users': list(map(lambda users: users.serialize(), Users.query.all()))})
+    # return jsonify({'users': list(map(lambda user: user.serialize(), User.query.all()))})
+    return auth_controller.getUsers()
+
 
 
 # # Route to Delete an user from the MySQL Database
@@ -53,7 +55,7 @@ def users():
 # @login_required
 def delete(id):
     try:
-        db.session.delete(Users.query.filter_by(id=id).first())
+        db.session.delete(User.query.filter_by(id=id).first())
         db.session.commit()
         # return redirect('/users')
         return 'Deleted user #' + id
