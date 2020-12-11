@@ -18,3 +18,4 @@ toml==0.10.1
 urllib3==1.25.11
 websocket-client==0.57.0
 zipp==3.3.1
+loguru==0.5.3

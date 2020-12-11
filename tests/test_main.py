@@ -4,6 +4,7 @@ import requests
 import socketio
 import subprocess
 from pathlib import Path
+from loguru import logger
 from time import sleep
 
 REPO_ROOT = Path(os.path.realpath(__file__)).parent.parent
@@ -11,22 +12,32 @@ REPO_ROOT = Path(os.path.realpath(__file__)).parent.parent
 
 @pytest.fixture
 def prepare_services():
-    subprocess.run(['docker-compose', 'down'], cwd=REPO_ROOT)
-    subprocess.run(['docker-compose', 'build'], cwd=REPO_ROOT)
-    docker = subprocess.run(['docker-compose', 'up', '-d'], cwd=REPO_ROOT)
+    # devnull so that there is not output
+    subprocess.run(['docker-compose', 'down'], cwd=REPO_ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(['docker-compose', 'build'], cwd=REPO_ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    # Popen instead of .run() so that we do not wait for the process to finish
+    # -d is removed so that the output comes to the 'docker' variable
+    #
+    docker = subprocess.Popen(['docker-compose', 'up'], cwd=REPO_ROOT)
     for i in range(8):
-        print('Trying to get connection to a microservice')
+        logger.info('Trying to get connection to a microservice')
         try:
             resp = requests.get('http://localhost:5051')
-            print(resp.text)
             resp.raise_for_status()
             break
         except Exception as e:
-            # print(e)
+            logger.error(e)
             pass
         sleep(5)
+        # remove this, this is so we wait some time and then start a test,
+        # just let the logs settle a little, and stop spamming
+        for _ in range(5):
+            logger.info("Established connection to microservice")
+            sleep(1)
+        subprocess.run(['docker-compose', 'ps'], cwd=REPO_ROOT)
+        sleep(5)
     yield
-    subprocess.run(['docker-compose', 'down'], cwd=REPO_ROOT)
+    docker.kill()
 
 
 def register_user(email, password):
