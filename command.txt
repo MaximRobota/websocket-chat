@@ -1,23 +1,24 @@
 https://hub.docker.com/
 
-sudo docker ps -a (ls)
-sudo docker rm -v $(sudo docker ps -aq -f status=exited) (Удалить неиспольз контейнеры)
-sudo docker images
-sudo docker rmi 1c61205f8b8f 1c61205f8b82 (удалить образы)
+docker ps -a (ls)
+docker rm -v $(docker ps -aq -f status=exited) (Удалить неиспольз контейнеры)
+docker images
+docker rmi 1c61205f8b8f 1c61205f8b82 (удалить образы)
+docker rmi $(docker images -f "dangling=true" -q) remove all  _< none >_ images
 
 start:
     docker build . -t flaskr
-    sudo docker-compose build
-    sudo docker-compose up (-d)
-    sudo docker-compose ps (ls images)
-    sudo docker-compose up -d db redis (install)
+    docker-compose build
+    docker-compose up (-d)
+    docker-compose ps (ls images)
+    docker-compose up -d db redis (install)
 
 stop:
-    sudo docker stop 93002b70cdeb
+    docker stop 93002b70cdeb
 
 Python:
     pip freeze (ls)
-    sudo pip install socketio (i)
+    pip install socketio (i)
     pip install -r requirements.txt (package install)
     pip freeze > requirements.txt  (add packages to requirements.txt)
 

@@ -1,4 +1,5 @@
 attrs==20.2.0
+bidict==0.21.2
 certifi==2020.6.20
 chardet==3.0.4
 idna==2.10
@@ -9,9 +10,12 @@ pluggy==0.13.1
 py==1.9.0
 pyparsing==2.4.7
 pytest==6.1.1
+python-engineio==4.0.0
+python-socketio==5.0.1
 requests==2.24.0
 six==1.15.0
 toml==0.10.1
 urllib3==1.25.11
+websocket-client==0.57.0
 zipp==3.3.1
 loguru==0.5.3
