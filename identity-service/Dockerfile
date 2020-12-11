@@ -8,3 +8,4 @@ RUN pip install --no-cache-dir --upgrade pip -r requirements.txt
 COPY . /usr/src/app/
 
 CMD [ "python", "identity_service.py" ]
+#CMD [ "python", "-u", "identity_service.py" ]
