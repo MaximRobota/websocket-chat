@@ -34,28 +34,28 @@ def index():
     return render_template('index.html', async_mode=socketio.async_mode)
 
 
-@app.route('/sessions')
-def sessions():
-    return render_template('sessions.html')
-
-
-@app.route('/session', methods=['GET', 'POST'])
-def session_access():
-    if request.method == 'GET':
-        return jsonify({
-            'session': session.get('value', ''),
-            'user': current_user.id
-                if current_user.is_authenticated else 'anonymous'
-        })
-    data = request.get_json()
-    if 'session' in data:
-        session['value'] = data['session']
-    elif 'user' in data:
-        if data['user']:
-            login_user(User(data['user']))
-        else:
-            logout_user()
-    return '', 204
+# @app.route('/sessions')
+# def sessions():
+#     return render_template('sessions.html')
+#
+#
+# @app.route('/session', methods=['GET', 'POST'])
+# def session_access():
+#     if request.method == 'GET':
+#         return jsonify({
+#             'session': session.get('value', ''),
+#             'user': current_user.id
+#                 if current_user.is_authenticated else 'anonymous'
+#         })
+#     data = request.get_json()
+#     if 'session' in data:
+#         session['value'] = data['session']
+#     elif 'user' in data:
+#         if data['user']:
+#             login_user(User(data['user']))
+#         else:
+#             logout_user()
+#     return '', 204
 
 
 @socketio.on('connect')
@@ -110,7 +110,7 @@ def close(message):
 @socketio.on('my_room_event')
 def send_room_message(message):
     session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('my_response',
+    emit('my_room_event',
          {'data': message['data'], 'count': session['receive_count']},
          room=message['room'])
 
