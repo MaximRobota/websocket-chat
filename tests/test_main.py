@@ -25,7 +25,7 @@ def prepare_services():
     for i in range(8):
         logger.info('Trying to get connection to a microservice')
         try:
-            resp = requests.get('http://localhost:5053')
+            resp = requests.get('http://localhost:5052')
             resp.raise_for_status()
             break
         except Exception as e:
@@ -73,7 +73,7 @@ def connect_socket(user_email, password):
     assert 'id' in resp_status_json['user']
 
     sio = socketio.Client()
-    sio.connect('http://localhost:5053', {"token": resp_login['auth_token']})
+    sio.connect('http://localhost:5052', {"token": resp_login['auth_token']})
     assert sio.connected
     return sio
 

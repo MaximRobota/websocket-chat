@@ -8,7 +8,7 @@
             integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
-            const socket = io.connect('http://localhost:5053');
+            const socket = io.connect('http://localhost:5052');
             socket.on('connect', () => {
               socket
                 .emit('authenticate', { token: '123jwt' })
