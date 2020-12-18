@@ -13,10 +13,13 @@ REPO_ROOT = Path(os.path.realpath(__file__)).parent.parent
 @pytest.fixture
 def prepare_services():
     # devnull so that there is not output
-    # subprocess.run(['docker-compose', 'down'], cwd=REPO_ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(['docker-compose', 'down'], cwd=REPO_ROOT)
-    # subprocess.run(['docker-compose', 'build'], cwd=REPO_ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.run(['docker-compose', 'build'], cwd=REPO_ROOT)
+    subprocess.run(['docker-compose', 'down'], cwd=REPO_ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    # subprocess.run(['docker-compose', 'down'], cwd=REPO_ROOT)
+    build = subprocess.run(['docker-compose', 'build'], cwd=REPO_ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if build.returncode != 0:
+        print("\n".join(list(map(lambda s: "Build stderr: "+s, build.stderr.decode().split("\n")))))
+        raise Exception("Build failed")
+    # subprocess.run(['docker-compose', 'build'], cwd=REPO_ROOT)
     # Popen instead of .run() so that we do not wait for the process to finish
     # -d is removed so that the output comes to the 'docker' variable
     #
@@ -41,9 +44,8 @@ def prepare_services():
     sleep(5)
     # remove this, this is so we wait some time and then start a test,
     # just let the logs settle a little, and stop spamming
-    for _ in range(5):
-        logger.info("Established connection to microservice")
-        sleep(1)
+
+    logger.info("Established connection to microservice")
     subprocess.run(['docker-compose', 'ps'], cwd=REPO_ROOT)
     sleep(5)
     yield
