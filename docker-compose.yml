@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  identity_service:
+  identity-service:
     build: identity-service
     image: cc-dev-identity-service:1.0.0
     environment:
@@ -31,11 +31,11 @@ services:
       - ./websocket-service:/usr/src/app
     links:
       - redis
-      - identity_service
+      - identity-service
       - kafka
     depends_on:
       - redis
-      - identity_service
+      - identity-service
       - kafka
     ports:
       - 5052:80

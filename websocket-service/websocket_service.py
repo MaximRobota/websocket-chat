@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 from threading import Lock
-from flask import Flask, render_template, session, request, jsonify, \
-    copy_current_request_context
+
+import requests
+from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
 from flask_login import LoginManager, UserMixin, current_user, login_user, \
     logout_user
 from flask_session import Session
-# import requests
 
 # Set this variable to "threading", "eventlet" or "gevent" to test the
 # different async modes, or leave it set to None for the application to choose
@@ -60,8 +60,13 @@ def index():
 
 @socketio.on('connect')
 def connect():
-    # resp = requests.post("http://localhost:5051/user", data={"name": username, "password": "pass"}).json()
-    print(22222222222222)
+    headers = {"Authorization": request.headers["Authorization"]}
+    resp_status = requests.get(
+        'http://identity-service:80/auth/status',
+        headers=headers
+    )
+    if resp_status.status_code != 200:
+        return False
     emit('my_response', {'data': 'Connected', 'count': 0})
 
 

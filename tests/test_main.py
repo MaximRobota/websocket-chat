@@ -6,6 +6,7 @@ import subprocess
 from pathlib import Path
 from loguru import logger
 from time import sleep
+import socketio.exceptions as sex
 
 REPO_ROOT = Path(os.path.realpath(__file__)).parent.parent
 
@@ -73,10 +74,15 @@ def connect_socket(user_email, password):
     resp_status_json = resp_status.json()
     assert resp_status_json['user']['email'] == user_email
     assert 'id' in resp_status_json['user']
-
-    sio = socketio.Client()
-    sio.connect('http://localhost:5052', {"token": resp_login['auth_token']})
+    token = resp_login['auth_token']
+    sio = connect_sio(token)
     assert sio.connected
+    return sio
+
+
+def connect_sio(token):
+    sio = socketio.Client()
+    sio.connect('http://localhost:5052', {'Authorization': 'Bearer ' + token})
     return sio
 
 
@@ -178,3 +184,10 @@ def test_connect_send_message_ws():
     assert msgs1[1]["data"]["msg"] == "Hello Vasia"
     sio1.disconnect()
     sio2.disconnect()
+
+
+@pytest.mark.usefixtures('prepare_services')
+def test_connect_sio_bad_token_does_not_connect():
+    with pytest.raises(sex.ConnectionError):
+        connect_sio("bad-token")
+
