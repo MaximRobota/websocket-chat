@@ -81,8 +81,10 @@ def connect_socket(user_email, password):
 
 
 def connect_sio(token):
+    host = 'http://localhost:5052'
     sio = socketio.Client()
-    sio.connect('http://localhost:5052', {'Authorization': 'Bearer ' + token})
+    logger.info(f"Connecting to socket io on {host} with token: {token}")
+    sio.connect(host, {'Authorization': 'Bearer ' + token})
     return sio
 
 
