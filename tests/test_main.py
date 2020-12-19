@@ -63,6 +63,7 @@ def login_user(email, password):
     return requests.post(
         'http://localhost:5051/auth/login', data={'email': email, 'password': password}).json()
 
+
 def connect_socket(user_email, password):
     register_user(user_email, password)
     resp_login = login_user(user_email, password)
@@ -89,7 +90,7 @@ def connect_sio(token):
 
 
 # @pytest.mark.usefixtures('prepare_services')
-# def test_registrer():
+# def test_register():
 #     user_email = 'Vasiya@gm.com'
 #     password = 'pass'
 #     resp_register = register_user(user_email, password)
@@ -152,6 +153,7 @@ def test_connect_send_message_ws():
     sio2.emit("join", {"room": "1"})
     msgs1 = []
     msgs2 = []
+
     def message_handler_one(msg):
         logger.warning(f"1 {msg}")
         msgs1.append(msg)
@@ -192,4 +194,3 @@ def test_connect_send_message_ws():
 def test_connect_sio_bad_token_does_not_connect():
     with pytest.raises(sex.ConnectionError):
         connect_sio("bad-token")
-
