@@ -17,7 +17,7 @@ services:
     links:
       - db
     ports:
-      - 5051:80
+      - $IDENTITY_PORT:80
 
   websocket_service:
     build: websocket-service
@@ -30,46 +30,46 @@ services:
     volumes:
       - ./websocket-service:/usr/src/app
     links:
-      - redis
+#      - redis
       - identity-service
       - kafka
     depends_on:
-      - redis
+#      - redis
       - identity-service
       - kafka
     ports:
-      - 5052:80
+      - $WEBSOCKET_PORT:80
 
   message_persistence_service:
     build: message-persistence-service
     image: cc-dev-message-persistence-service:1.0.0
     environment:
+      PYTHONUNBUFFERED: 1
       MYSQL_HOST: db
       MYSQL_PORT: 3306
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
       MYSQL_DB: $MYSQL_DB
-    depends_on:
-      - db
-      - kafka
-    links:
-      - db
-      - kafka
-    ports:
-      - 5053:80
+#    depends_on:
+#      - db
+#      - kafka
+#    links:
+#      - db
+#      - kafka
 
-  redis:
-    image: redis:4.0-alpine
-    ports:
-      - 6380:6379
-    command: ['redis-server']
-    volumes:
-      - redis-data:/data
+#  redis:
+#    image: redis:4.0-alpine
+#    ports:
+#      - 6380:6379
+#    command: ['redis-server']
+#    volumes:
+#      - redis-data:/data
 
   zookeeper:
     image: wurstmeister/zookeeper
     expose:
       - "2181"
+
   kafka:
     image: wurstmeister/kafka
     ports:
@@ -77,19 +77,19 @@ services:
     expose:
       - "9093"
     environment:
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:SASL_PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+#      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+#      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:SASL_PLAINTEXT
+      KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
-      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
-      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+#      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+#      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
+#      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+#      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
     depends_on:
       - zookeeper
-    volumes:
-      - ./:/etc/kafka
+#    volumes:
+#      - ./:/etc/kafka
 
   db:
     image: mysql:5.7
@@ -105,16 +105,16 @@ services:
       - 3380:3306
     expose:
       - 3380
-#    volumes:
-#      - "./db/data:/var/lib/mysql"
-#      - "./db/initdb:/docker-entrypoint-initdb.d/:ro"
+    volumes:
+      - "./db/data:/var/lib/mysql"
+      - "./db/initdb:/docker-entrypoint-initdb.d/:ro"
+#
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - 8001:8080
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8001:8080
-
-volumes:
-  redis-data:
-  db-data:
+#volumes:
+#  redis-data:
+#  db-data:

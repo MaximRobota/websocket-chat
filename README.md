@@ -5,6 +5,41 @@
 * Client can register with a login and password using identity service
 * Any service can get user id by using identity service
 
+
+## Installation & Run
+```bash
+# Download this project
+git clone https://github.com/MaximRobota/websocket-chat
+```
+
+Before running services, you should set the database config with yours or set the your database config with
+my values on [.env](https://github.com/MaximRobota/websocket-chat/blob/master/.env)
+```go
+MYSQL_HOST=db
+MYSQL_USER=user
+MYSQL_PASSWORD=devpass
+MYSQL_PORT=3398
+MYSQL_DB=mysql_database
+```
+##### Build and Run
+```bash
+cd websocket-chat
+docker-compose build
+docker-compose up
+```
+
+##### API Endpoints : http://127.0.0.1:5051 (:5052, adminer :8080)
+
+## Structure
+```
+├── identity-service                // Our API core handlers
+├── message-persistence-service     // Check and save events
+├── websocket-service               // Two-way interactive communication session between the user's browser and a server
+├── tests
+├── docker-compose.yml
+```
+
+
 ### Identity service:
 ```
 /auth/register (name, pass) -> token
@@ -87,13 +122,13 @@ web_socket_service:
 Build: ..
 
 Environment:
-	KAFKA_PORT: 5050
+	KAFKA_PORT: 9092
 persistence_service:
 	Image:
 Build: ..
 
 Environment:
-	KAFKA_PORT: 5050 
+	KAFKA_PORT: 9092 
 ```
 ### Acceptance criteria
 * Docker-compose -f docker_compose.yaml up
@@ -106,29 +141,14 @@ Environment:
 
 
 ### Plan
-- [ ] Hello world with redis 
-- [ ] Save and get values (remove value too)
-- [ ] Hello world with kafka
+- [x] Use docker-compose up to start for all services
+- [x] JWT Authentication
+- [x] Flask app for identity service
+- [x] Create schema for database MySql
+- [ ] Implement Kafka Producer / Consumer
 - [ ] 2 processes 
 	1. sends a message
 	2. prints the received message
-- [ ] Figure out what is python flask 
-- [ ] Flask app for identity service  
-- [ ] Create schema for database
-- [ ] Create docker image for identity service 
-- [ ] Create docker image for database
-- [ ] Create docker-compose.yaml for id_service and database 
-- [ ] Use docker-compose up to start the two services
-
-### QUICK START (Use for help 'command.txt')
-
-```
-sudo docker-compose build
-```
-
-```
-sudo docker-compose up
-```
-Services: http://localhost:5051 (:5052, :5053)
-
-DB (adminer): http://localhost:8080
+- [ ] Implement Kafka Producer / Customer
+- [ ] Implement Redis
+- [ ] Implement Kubernetes
