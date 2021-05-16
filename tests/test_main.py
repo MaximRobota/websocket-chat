@@ -7,8 +7,10 @@ from pathlib import Path
 from loguru import logger
 from time import sleep
 import socketio.exceptions as sex
+# from flaskr.db import get_db
 
 REPO_ROOT = Path(os.path.realpath(__file__)).parent.parent
+USER_ID = -1
 
 
 @pytest.fixture
@@ -50,7 +52,7 @@ def prepare_services():
     subprocess.run(['docker-compose', 'ps'], cwd=REPO_ROOT)
     sleep(5)
     yield
-    # subprocess.run(['docker-compose', 'ps'], cwd=REPO_ROOT)
+    # subprocess.run(['docker-compose', 'down'], cwd=REPO_ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     docker.kill()
     subprocess.run(['docker-compose', 'down'], cwd=REPO_ROOT)
 
@@ -66,11 +68,15 @@ def login_user(email, password):
 
 
 def connect_socket(user_email, password):
+    global USER_ID
     register_user(user_email, password)
     resp_login = login_user(user_email, password)
 
     assert 'auth_token' in resp_login
+    assert 'user' in resp_login
+    assert 'id' in resp_login['user']
 
+    USER_ID = resp_login['user']['id']
     headers = {'Authorization': 'Bearer ' + resp_login['auth_token']}
     resp_status = requests.get('http://localhost:5051/auth/status', headers=headers)
     resp_status_json = resp_status.json()
@@ -90,14 +96,21 @@ def connect_sio(token):
     return sio
 
 
-# @pytest.mark.usefixtures('prepare_services')
-# def test_register():
-#     user_email = 'Vasiya@gm.com'
-#     password = 'pass'
-#     resp_register = register_user(user_email, password)
-#     assert 'user' in resp_register
-#     assert resp_register['user']['email'] == user_email
-#     assert 'id' in resp_register['user']
+@pytest.mark.usefixtures('prepare_services')
+def test_register():
+    user_email = 'Vasiya@gm.com'
+    password = 'pass'
+    resp_register = register_user(user_email, password)
+    assert 'user' in resp_register
+    assert resp_register['user']['email'] == user_email
+    assert 'id' in resp_register['user']
+
+    # test that the user was inserted into the database
+    # with app.app_context():
+    #     assert (
+    #         get_db().execute("select * from user where username = 'a'").fetchone()
+    #         is not None
+    #     )
 #
 #
 # @pytest.mark.usefixtures('prepare_services')
@@ -148,51 +161,54 @@ def connect_sio(token):
 @pytest.mark.usefixtures('prepare_services')
 def test_connect_send_message_ws():
     sio1 = connect_socket('Vasiya1@gm.com', 'pass1')
-    sio2 = connect_socket('Vasiya2@gm.com', 'pass2')
-
+    # sio2 = connect_socket('Vasiya2@gm.com', 'pass2')
+    #
     sio1.emit("join", {"room": "1"})
-    sio2.emit("join", {"room": "1"})
+    # sio2.emit("join", {"room": "1"})
     msgs1 = []
-    msgs2 = []
+    # msgs2 = []
+    #
 
     def message_handler_one(msg):
         logger.warning(f"1 {msg}")
         msgs1.append(msg)
-
-    def message_handler_two(msg):
-        logger.warning(f"2 {msg}")
-        msgs2.append(msg)
-
+    #
+    # def message_handler_two(msg):
+    #     logger.warning(f"2 {msg}")
+    #     msgs2.append(msg)
+    #
     sio1.on('my_room_event', message_handler_one)
-    sio2.on('my_room_event', message_handler_two)
-
+    # sio2.on('my_room_event', message_handler_two)
+    #
     data_one = {
         "state": 1,
-        "msg": "Hello Robert"
+        "message": "Hello Robert",
+        "user_from": USER_ID,
+        "user_to": 2
     }
-
-    data_two = {
-        "state": 2,
-        "msg": "Hello Vasia"
-    }
+    #
+    # data_two = {
+    #     "state": 2,
+    #     "msg": "Hello Vasia"
+    # }
     sleep(2)
     sio1.emit("my_room_event", {"room": "1", "data": data_one})
-    # sio2.emit("my_room_event", {"room": "1", "data": data_two})
-    sleep(15)
-    # msgs1.sort(key=lambda d: d["data"]["state"])
-    # msgs2.sort(key=lambda d: d["data"]["state"])
-    # assert msgs1 == msgs2
-    # assert len(msgs1) == 2
-    # assert msgs1[0]["data"]["state"] == 1
-    # assert msgs1[0]["data"]["msg"] == "Hello Robert"
-    # assert msgs1[1]["data"]["state"] == 2
-    # assert msgs1[1]["data"]["msg"] == "Hello Vasia"
-    # assert "uuid" in msgs1[0]["data"]
-    # assert "uuid" in msgs1[1]["data"]
-    assert msgs1[0]["data"]["uuid"] == 3
-    # assert msgs1[1]["data"]["uuid"] == 3
+    # # sio2.emit("my_room_event", {"room": "1", "data": data_two})
+    sleep(25)
+    # # msgs1.sort(key=lambda d: d["data"]["state"])
+    # # msgs2.sort(key=lambda d: d["data"]["state"])
+    # # assert msgs1 == msgs2
+    # # assert len(msgs1) == 2
+    assert msgs1[0]["data"]["state"] == 1
+    assert msgs1[0]["data"]["msg"] == "Hello Robert"
+    # # assert msgs1[1]["data"]["state"] == 2
+    # # assert msgs1[1]["data"]["msg"] == "Hello Vasia"
+    assert "_uuid" in msgs1[0]["data"]
+    # # assert "_uuid" in msgs1[1]["data"]
+    # assert msgs1[0]["data"]["_uuid"] == 3
+    # # assert msgs1[1]["data"]["_uuid"] == 3
     sio1.disconnect()
-    sio2.disconnect()
+    # sio2.disconnect()
 
 
 # @pytest.mark.usefixtures('prepare_services')

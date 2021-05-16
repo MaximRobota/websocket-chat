@@ -1,3 +1,4 @@
+from loguru import logger
 from .models import User
 from app import app, db
 from .controllers.auth_controller import AuthController
@@ -18,7 +19,7 @@ def before_first_request_func():
 
 @app.route('/')
 def index():
-    return 'identity-service is working!'
+    return "I.S. OK !"
 
 
 @app.route('/auth/register', methods=['POST'])

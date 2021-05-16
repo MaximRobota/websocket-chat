@@ -31,11 +31,11 @@ services:
       - ./websocket-service:/usr/src/app
     links:
 #      - redis
-#      - identity-service
+      - identity-service
       - kafka
     depends_on:
 #      - redis
-#      - identity-service
+      - identity-service
       - kafka
     ports:
       - $WEBSOCKET_PORT:80
@@ -50,12 +50,12 @@ services:
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
       MYSQL_DB: $MYSQL_DB
-#    depends_on:
-#      - db
-#      - kafka
-#    links:
-#      - db
-#      - kafka
+    depends_on:
+      - db
+      - kafka
+    links:
+      - db
+      - kafka
 
 #  redis:
 #    image: redis:4.0-alpine
@@ -105,15 +105,15 @@ services:
       - 3380:3306
     expose:
       - 3380
-    volumes:
-      - "./db/data:/var/lib/mysql"
-      - "./db/initdb:/docker-entrypoint-initdb.d/:ro"
+#    volumes:
+#      - "./db/data:/var/lib/mysql"
+#      - "./db/initdb:/docker-entrypoint-initdb.d/:ro"
 #
-#  adminer:
-#    image: adminer
-#    restart: always
-#    ports:
-#      - 8001:8080
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8001:8080
 
 #volumes:
 #  redis-data:

@@ -1,33 +1,33 @@
-#!/usr/bin/env python
-import logging
-import time
-
 import requests
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room, rooms
 from kafka_util import create_topic, create_producer, OUTBOUND_TOPIC_NAME, create_consumer, INBOUND_TOPIC_NAME
 from loguru import logger
+
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins='*')
+GLOBAL_HEADERS = {}
+
 
 @app.route("/")
 def index():
-    return "OK !"
+    return "W.S. OK !"
 
 
 @socketio.on('connect')
 def connect():
-    app.logger.info("Connected!")
+    global GLOBAL_HEADERS
+
     auth = request.headers['Authorization']
-    headers = {'Authorization': auth}
-    app.logger.info(f"Auth {auth}")
+    GLOBAL_HEADERS = {'Authorization': auth}
+    app.logger.info(f"Connected! Auth {auth}")
     resp_status = requests.get(
         'http://identity-service:80/auth/status',
-        headers=headers
+        headers=GLOBAL_HEADERS
     )
     if resp_status.status_code != 200:
         return False
-    emit('my_response', {'data': 'Connected', 'count': 0})
+    emit('my_response', {'data': 'Connected', 'user': resp_status.json()})
 
 
 @socketio.on('join')
@@ -39,13 +39,15 @@ def join(message):
 
 @socketio.on('my_room_event')
 def send_room_message(message):
+    global GLOBAL_HEADERS
+
     logger.info(f"Got message from websocket {message}")
 
+    message['headers'] = GLOBAL_HEADERS
     consumer = create_consumer()
-
     create_producer().send(OUTBOUND_TOPIC_NAME, message)
 
-    logger.info(f"Sent message to kafka on topic {OUTBOUND_TOPIC_NAME!r} {message}")
+    logger.info(f"Sent message to kafka on topic (WS => MS) {OUTBOUND_TOPIC_NAME!r} {message}")
 
     for msg in consumer:
         # data = next(consumer)

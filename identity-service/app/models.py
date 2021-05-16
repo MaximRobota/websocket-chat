@@ -36,7 +36,8 @@ class User(db.Model):
         except Exception as e:
             return e
 
-    def decode_auth_token(self, auth_token):
+    @staticmethod
+    def decode_auth_token(auth_token):
         try:
             payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
             is_blacklisted_token = BlacklistToken.check_blacklist(auth_token)
@@ -76,13 +77,15 @@ class BlacklistToken(db.Model):
 class Msg(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     _uuid = db.Column(db.String(120))
+    state = db.Column(db.String(120))
     message = db.Column(db.String(120))
     user_from = db.Column(db.String(120))
     user_to = db.Column(db.String(120))
     created_on = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 
-    def __init__(self, _uuid, message, user_from, user_to):
+    def __init__(self, _uuid, state, message, user_from, user_to):
         self._uuid = _uuid
+        self.state = state
         self.message = message
         self.user_from = user_from
         self.user_to = user_to
@@ -90,6 +93,7 @@ class Msg(db.Model):
     def serialize(self):
         return {"id": self.id,
                 "_uuid": self._uuid,
+                "state": self.state,
                 "message": self.message,
                 "user_from": self.user_from,
                 "user_to": self.user_to,

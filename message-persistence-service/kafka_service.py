@@ -30,7 +30,7 @@ def create_topic():
             time.sleep(1)
 
     topic_list = [NewTopic(name=OUTBOUND_TOPIC_NAME, num_partitions=1, replication_factor=1)]
-    logger.info(admin_client.list_topics())
+    logger.info(f'Topics List {admin_client.list_topics()}')
     admin_client.create_topics(new_topics=topic_list, validate_only=False)
     logger.info(f'Created topic: {OUTBOUND_TOPIC_NAME}')
 
@@ -56,17 +56,21 @@ def create_consumer():
 
 
 def save_msg_to_db(data):
+    logger.info(f'data {data}')
+
     try:
         resp_status = requests.post(
-            'http://identity-service:80/message', data,
-            headers=data.headers
+            'http://identity-service:80/message', data["data"],
+            headers=data['headers']
         )
+        logger.info(f'resp_status {resp_status.status_code}')
         if resp_status.status_code == 200:
-            return True
+            return resp_status
         else:
             return False
     except Exception as e:
-        return logger.info('Could not connect to DB ', e)
+        return logger.info('Could not connect to Identity service ', e)
+
 
 if __name__ == '__main__':
     create_topic()
@@ -75,12 +79,17 @@ if __name__ == '__main__':
     logger.info('Got Consumer!')
     for msg in consumer:
         logger.info(f'Got msg: {msg}')
-        data = msg.value
-        data['data']['_uuid'] = uuid.uuid1()
+        dataValue = msg.value
+        # dataValue['data']['_uuid'] = uuid.uuid1()
+        dataValue['data']['_uuid'] = 'qwqeqweqweqweqwe'
 
-        if save_msg_to_db(data):
-            producer.send(OUTBOUND_TOPIC_NAME, data)
-            logger.info(f"Sent message to topic {OUTBOUND_TOPIC_NAME!r} {data}")
+        resp_status = save_msg_to_db(dataValue)
+
+        logger.info(f"resp_status {resp_status}")
+
+        if resp_status:
+            producer.send(OUTBOUND_TOPIC_NAME, resp_status)
+            logger.info(f"Sent message to topic (MS => WS) {OUTBOUND_TOPIC_NAME!r} {resp_status}")
         else:
             logger.info('Failed to send message to topic')
 

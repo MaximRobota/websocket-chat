@@ -5,6 +5,7 @@ docker rm -v $(docker ps -aq -f status=exited) (Удалить неисполь�
 docker images
 docker rmi 1c61205f8b8f 1c61205f8b82 (удалить образы)
 docker rmi $(docker images -f "dangling=true" -q) remove all  _< none >_ images
+docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
 
 start:
     docker build . -t flaskr
