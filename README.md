@@ -149,5 +149,5 @@ Environment:
 - [ ] 2 processes 
 	1. sends a message
 	2. prints the received message
-- [ ] Implement Redis
-- [ ] Implement Kubernetes
+- [ ] ~~Implement Redis (did not find application in the project)~~
+- [x] Implement Kubernetes (basic test without using CP3-WS)
