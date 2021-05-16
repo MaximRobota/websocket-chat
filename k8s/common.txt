@@ -1,0 +1,134 @@
+ 1524  sudo apt-get update
+ 1525  sudo apt-get install apt-transport-https
+ 1526  sudo apt-get upgrade
+ 1527  sudo apt install virtualbox virtualbox-ext-pack
+ 1528  wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+ 1529  chmod +x minikube-linux-amd64
+ 1530  sudo mv minikube-linux-amd64 /usr/local/bin/minikube
+ 1531  minikube version
+ 1532  curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+ 1533  chmod +x ./kubectl
+ 1534  sudo mv ./kubectl /usr/local/bin/kubectl
+ 1535  kubectl version -o json
+ 1536  minikube start
+ 1537  kubectl cluster-info
+ 1538  kubectl get nodes
+ 1539  minikube dashboard
+ 1540  kubectl apply -f /gfdgfd.yaml
+ 1541  kubectl get pods
+ 1542  kubectl get p
+ 1543  history
+ 1544  history | grep "-t"
+ 1545  history | grep "\-t"
+ 1546  history | grep "\--name"
+ 1547  webs
+ 1548  kubectl logs -f svc/nginx
+ 1549  stern
+ 1550  sudo apt-get install stern
+ 1551  which kubectl
+ 1552  cp ~/Downloads/stern_linux_amd64 /usr/local/bin/stern
+ 1553  sudo cp ~/Downloads/stern_linux_amd64 /usr/local/bin/stern
+ 1554  chmod +x /usr/local/bin/stern
+ 1555  sudo chmod +x /usr/local/bin/stern
+ 1556  stern
+ 1557  stern nginx
+ 1558  minikube dashboard
+
+
+---
+ 1525  sudo apt-get install apt-transport-https
+ 1526  sudo apt-get upgrade
+ 1527  sudo apt install virtualbox virtualbox-ext-pack
+ 1528  wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+ 1529  chmod +x minikube-linux-amd64
+ 1530  sudo mv minikube-linux-amd64 /usr/local/bin/minikube
+ 1531  minikube version
+ 1532  curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+ 1533  chmod +x ./kubectl
+ 1534  sudo mv ./kubectl /usr/local/bin/kubectl
+ 1535  kubectl version -o json
+ 1536  minikube start
+ 1537  kubectl cluster-info
+ 1538  kubectl get nodes
+ 1539  minikube dashboard
+ 1540  kubectl apply -f /gfdgfd.yaml
+ 1541  kubectl get pods
+ 1542  kubectl get p
+ 1543  history
+ 1544  history | grep "-t"
+ 1545  history | grep "\-t"
+ 1546  history | grep "\--name"
+ 1547  webs
+ 1548  kubectl get po
+ 1549  minicube status
+ 1550  minikube status
+ 1551  env
+ 1552  echo $USER
+ 1553  docker images
+ 1554  kubectl apply -f deployment.yaml 
+ 1555  k get depoy
+ 1556  kubectl get deploy
+ 1557  kubectl get pod
+ 1558  kubectl describe pod nginx-deployment-b8445c558-xrlfr
+ 1559  eval $(minikube docker-env)
+ 1560  docker ps
+ 1561  $(minikube docker-env)
+ 1562  minikube docker-env
+ 1563  docker ps
+ 1564  minikube docker-env
+ 1565  docker ps
+ 1566  minikube status
+ 1567  docker ps
+ 1568  docker build -t my-image:latest .
+ 1569  kubectl get pod
+ 1570  kubectl delete pod nginx-deployment-b8445c558-gc78g
+ 1571  kubectl get pod
+ 1572  kubectl apply -f deployment.yaml 
+ 1573  k get pod
+ 1574  kubectl get pod
+ 1575  kubectl port-forward nginx-deployment-5986686c7-ckpzt 80:80
+ 1576  kubectl port-forward nginx-deployment-5986686c7-ckpzt 80:8081
+ 1577  kubectl port-forward nginx-deployment-5986686c7-ckpzt 8081:80
+ 1578  kubectl apply -f deployment.yaml 
+ 1579  kubectl get pod 
+ 1580  kubectl get svc
+ 1581  minikube service nginx
+ 1582  kubectl apply -f deployment.yaml 
+ 1583  minikube service nginx
+
+----
+
+ 1528  docker build -t my-image .
+ 1529  docker run up
+ 1530* docker run 
+ 1531  docker run my-image:latest
+ 1532  docker build -t my-image-2 .
+ 1533  docker run my-image:latest
+ 1534  docker run my-image-2:latest
+ 1535  docker build -t my-image-3 .
+ 1536  docker build -t my-image .
+ 1537  docker run my-image:latest
+ 1538  docker run my-image:latest -p 80:80
+ 1539  docker run -p 80:80 my-image:latest
+ 1540  docker build -t my-image .
+ 1541  docker run -p 80:80 my-image:latest
+ 1542  docker build -t my-image .
+ 1543  docker run -p 80:80 my-image:latest
+ 1544  docker build -t my-image .
+ 1545  docker run -p 80:80 my-image:latest
+ 1546  docker build -t my-image .
+ 1547  docker run -p 80:80 my-image:latest
+ 1548  docker build -t my-image .
+ 1549  docker run -p 80:80 my-image:latest
+ 1550  docker build -t my-image .
+ 1551  docker run -p 80:80 my-image:latest
+ 1552  docker build -t my-image .
+ 1553  docker run -p 80:80 my-image:latest
+ 1554  docker build -t my-image .
+ 1555  docker run -p 80:80 my-image:latest
+ 1556  docker build -t my-image .
+
+
+
+
+
